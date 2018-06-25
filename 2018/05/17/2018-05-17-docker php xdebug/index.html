@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="php 환경에서 개발시 log 파일을 생성해 일일이 실행 결과를 출력해 확인해 볼 수 있지만매번 reload 하는 건 상당히 불편하고 귀찮은 일이다.
+더불어 개발 환경과 상용 환경에서 오는 다양한 문제들은 상당히 큰 이슈다.이런 문제 해결과 형상 관리에 설정 및 환경의">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="John Doe">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="Tip 2. docker로 php xdebug 환경 만들기"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="Hexo"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>Tip 2. docker로 php xdebug 환경 만들기 - Hexo</title>
+
+    <!-- Tachyons Core CSS -->
+    <link rel="stylesheet" href="//unpkg.com/tachyons/css/tachyons.min.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Google Analytics -->
+    
+
+
+</head>
+
+
+<body>
+
+<!-- Main Content -->
+<!-- Banner -->
+<!-- Banner -->
+<div class="w-100 bg-1 ph5-ns ph3 text-light">
+    
+    <nav class="db dt-l w-100 mw8 center border-box pv3">
+        <a class="db dtc-l v-mid link dim w-100 w-25-l tc tl-l mb2 mb0-l white" href="/" title="Hexo">
+            <img src="http://www.codeblocq.com/assets/projects/hexo-theme-anodyne/assets/anodyne.svg" class="dib h3" alt="Hexo">
+        </a>
+        <div class="db dtc-l v-mid w-100 w-75-l tc tr-l">
+            
+                <a class="link dim f6 f5-l dib mr3 mr4-l white" 
+                    href="/" 
+                    title="Home">
+                    Home
+                </a>
+            
+                <a class="link dim f6 f5-l dib mr3 mr4-l white" 
+                    href="/archives" 
+                    title="Archives">
+                    Archives
+                </a>
+            
+                <a class="link dim f6 f5-l dib mr3 mr4-l white" 
+                    href="https://github.com/alzkdpf" 
+                    title="Git">
+                    Git
+                </a>
+            
+        </div>
+    </nav>
+
+    <!-- Title -->
+    <div class="w-100 mw8 center vh-40 dt">
+        <div class="dtc v-mid white">
+            <h1 class="f1-l f2-m tc tc-m tl-ns">Tip 2. docker로 php xdebug 환경 만들기</h1>
+            <p class="f4 fw3 pab-100px tc tc-m tl-ns">2018-05-17</p>
+        </div>
+    </div>
+
+    <!-- Icon -->
+    <div class="relative w-100 mw8 center white dn dn-m db-ns">
+        <i class="header-icon fa fa-file-text-o"></i>
+    </div>
+</div>
+
+<!-- Content -->
+<div class="w-100 ph2 ph4-m ph5-l mv5 mv6-l">
+    <div class="content">
+        <div class="mw8 center">
+            <div class="cf">
+                <div class="fl w-100 w-70-l mw7 left fw3 lh-copy pr4-ns pr0-m post-content">
+                    <!-- Tags Vertical -->
+                    
+
+                    <!-- Main Post Content -->
+                    <p>php 환경에서 개발시 log 파일을 생성해 일일이 실행 결과를 출력해 확인해 볼 수 있지만<br>매번 reload 하는 건 상당히 불편하고 귀찮은 일이다.</p>
+<p>더불어 개발 환경과 상용 환경에서 오는 다양한 문제들은 상당히 큰 이슈다.<br>이런 문제 해결과 형상 관리에 설정 및 환경의 통합을 가져오기 위해선 docker는 뛰어난 도구다.</p>
+<p>그중 이번 포스트에서는 docker를 통해 php 환경에서 xdebug 설정을 구현해 보고자 한다.</p>
+<h2 id="필수-설치"><a href="#필수-설치" class="headerlink" title="필수 설치"></a>필수 설치</h2><ul>
+<li>docker</li>
+<li>container:<br><a href="https://github.com/alzkdpf/docker-php-xdebug" target="_blank" rel="noopener">GitHub - alzkdpf/docker-php-xdebug: php-xdebug</a></li>
+</ul>
+<p>p.s 윈도우 개발 환경에서는 docker 이미지 생성과정에서 간혹 오류가 발생함으로 에러시 vagrant 위에 docker 환경을 구축하는 것을 추천한다.</p>
+<h2 id="설치"><a href="#설치" class="headerlink" title="설치"></a>설치</h2><ol>
+<li><p>php docker clone<br> $ git clone <a href="https://github.com/alzkdpf/docker-php-xdebug" target="_blank" rel="noopener">https://github.com/alzkdpf/docker-php-xdebug</a> docker-php-xdebug</p>
+</li>
+<li><p>execution</p>
+<p> $ ./start.sh </p>
+<p> p.s 우분투는 sudo로 권한 확보 후 실행이 필요하고 그래도 실행이 안될 경우<br> chmod +x ./start.sh 를 통해 실행 권한을 만들어 준다.</p>
+</li>
+<li><p>vscode plugin install &amp; debug setting </p>
+<p> 확장 플러그인 검색에서 php xdebug 설치 후 아래와 같이 구성을 추가한다.</p>
+</li>
+</ol>
+<h4 id="vscode-xdebug-config"><a href="#vscode-xdebug-config" class="headerlink" title="vscode xdebug config"></a>vscode xdebug config</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&quot;version&quot;: &quot;0.2.0&quot;,</span><br><span class="line">&quot;configurations&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;name&quot;: &quot;Listen for XDebug&quot;,</span><br><span class="line">        &quot;type&quot;: &quot;php&quot;,</span><br><span class="line">        &quot;request&quot;: &quot;launch&quot;,</span><br><span class="line">        &quot;serverSourceRoot&quot;: &quot;/var/www/html&quot;,</span><br><span class="line">        &quot;localSourceRoot&quot;: &quot;$&#123;workspaceRoot&#125;/www&quot;,</span><br><span class="line">        &quot;port&quot;: 9000</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>여기서 serverSourceRoot 는 docker container 안에서 소스 경로이며 localSourceRoot 는 현재 vscode 상의 경로이다.</p>
+<ol start="4">
+<li>vscode debug run</li>
+</ol>
+<p>debug 실행 후 브라우저에서 접속하면 vscode에서 잡혀있는 브레이크 포인터를 확인 할 수 있다.</p>
+<h2 id="실행-영상"><a href="#실행-영상" class="headerlink" title="실행 영상"></a>실행 영상</h2><p><a href="https://youtu.be/AaNPCeA4EAg" title="php xdebug" target="_blank" rel="noopener"><img src="https://i.ytimg.com/vi/AaNPCeA4EAg/2.jpg?time=1526530490323" alt="IMAGE ALT TEXT"></a></p>
+
+                    
+                    <!-- Tags Bottom -->
+                    
+
+                    <!-- Comments -->
+                    
+
+
+
+                </div>
+                <div class="fl w-100 w-30-l center fw3 lh-copy pl4-ns tl black-50">
+                    
+                    <hr class="dn-l mw4 black-50 mt5" />
+                    
+                    <!-- Widget 1: About -->
+                    <div class="mt5 mt0-l">
+    <article class="dt db-l mw8 mw8-m mw5-ns center ml0-l bg-white mv3">
+        <div class="dn dtc-m db-l v-mid tc pr4 pr0-l" style="min-width: 6rem;">
+            <img src="https://avatars3.githubusercontent.com/u/12118039?s=460&v=4" class="mb4-l br-100 h3 w3 h4-l w4-l dib" title="John Doe">
+        </div>
+        <div class="dtc db-l v-mid lh-copy measure center f6 black-50 tj">
+            21th Developer
+        </div>
+    </article>
+</div>
+
+                    <hr class="dn-l mw4 black-50 mt5" />
+                    
+                    <!-- Widget 2: Categories -->
+                    
+
+                    <!-- Widget 3: Recent Posts -->
+                    <div class="mt5 tc tl-l">
+    <h3>Recent Posts</h3>
+    
+        <p>
+            <a href="/2018/06/25/new/">Comming Soon....</a>
+        </p>
+    
+        <p>
+            <a href="/2018/06/04/2018-06-04-jenkins & telegram push/">텔레그램을 통한 apk 배포 시스템 만들기 1부</a>
+        </p>
+    
+        <p>
+            <a href="/2018/05/24/2018-05-24-리눅스 버전확인하기/">Tip 3. docker 리눅스 버전확인하기</a>
+        </p>
+    
+        <p>
+            <a href="/2018/05/17/2018-05-17-docker php xdebug/">Tip 2. docker로 php xdebug 환경 만들기</a>
+        </p>
+    
+        <p>
+            <a href="/2018/04/20/2018-04-20-welcome-to-jekyll/">Tip 1. Mermaid Editor 를 이용한 sequenceDiagram 만들기</a>
+        </p>
+    
+</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<div class="bg-1 ph2 ph5-ns pv5">
+        <div class="mv8">
+            <div class="center tc">
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="https://github.com/alzkdpf" target="_blank">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="mailto:code21032@gmail.com" target="_blank">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="/#" target="_blank">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </div>
+                
+            </div>
+            <div class="f6 f5-ns center tc white pt5 fw3">
+                All right reserved | Design & Hexo <a class="link dim white" href="http://www.codeblocq.com/">Jonathan Klughertz</a>
+            </div>
+        </div>
+    </div>
+
+<!-- After Footer -->
+<!-- Disqus Comments -->
+
+
+
+    <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+    <script>
+      if (window.mermaid) {
+        mermaid.initialize({theme: 'forest'});
+      }
+    </script>
+  
+
+</body>
+
+</html>
